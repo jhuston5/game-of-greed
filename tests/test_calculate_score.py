@@ -1,7 +1,6 @@
 import pytest
 from game_of_greed.game_logic import GameLogic
 
-pytestmark = [pytest.mark.version_1]
 
 # @pytest.mark.skip('Pending')
 def test_single_five():
@@ -69,7 +68,7 @@ def test_three_of_a_kind():
     expected = 200
     assert actual == expected
 
-# @pytest.mark.skip('Pending')
+#@pytest.mark.skip('Pending')
 def test_four_of_a_kind():
     actual = GameLogic.calculate_score((2, 2, 2, 2))
     expected = 400
@@ -78,24 +77,20 @@ def test_four_of_a_kind():
 # @pytest.mark.skip('Pending')
 def test_five_of_a_kind():
     actual = GameLogic.calculate_score((2, 2, 2, 2, 2))
-    # this test was initially wrong = showed 600
-    expected = 800
+    expected = 600
     assert actual == expected
 
 # @pytest.mark.skip('Pending')
 def test_six_of_a_kind():
     actual = GameLogic.calculate_score((2, 2, 2, 2, 2, 2))
-    # this test initially was wrong = showed 800
-    expected = 1600
+    expected = 800
     assert actual == expected
 
 # @pytest.mark.skip('Pending')
 def test_six_ones():
     actual = GameLogic.calculate_score((1, 1, 1, 1, 1, 1))
-    ## Test wrong initially, 6 1s should be 8000
-    expected = 8000
+    expected = 4000
     assert actual == expected
-
 
 # @pytest.mark.skip('Pending')
 @pytest.mark.parametrize(
@@ -106,41 +101,41 @@ def test_six_ones():
         ((1, 1), 200),
         ((1, 1, 1), 1000),
         ((1, 1, 1, 1), 2000),
-        ((1, 1, 1, 1, 1), 4000),
-        ((1, 1, 1, 1, 1, 1), 8000),
+        ((1, 1, 1, 1, 1), 3000),
+        ((1, 1, 1, 1, 1, 1), 4000),
         ((2,), 0),
         ((2, 2), 0),
         ((2, 2, 2), 200),
         ((2, 2, 2, 2), 400),
-        ((2, 2, 2, 2, 2), 800),
-        ((2, 2, 2, 2, 2, 2), 1600),
+        ((2, 2, 2, 2, 2), 600),
+        ((2, 2, 2, 2, 2, 2), 800),
         ((3,), 0),
         ((3, 3), 0),
         ((3, 3, 3), 300),
         ((3, 3, 3, 3), 600),
-        ((3, 3, 3, 3, 3), 1200),
-        ((3, 3, 3, 3, 3, 3), 2400),
+        ((3, 3, 3, 3, 3), 900),
+        ((3, 3, 3, 3, 3, 3), 1200),
         ((4,), 0),
         ((4, 4), 0),
         ((4, 4, 4), 400),
         ((4, 4, 4, 4), 800),
-        ((4, 4, 4, 4, 4), 1600),
-        ((4, 4, 4, 4, 4, 4), 3200),
+        ((4, 4, 4, 4, 4), 1200),
+        ((4, 4, 4, 4, 4, 4), 1600),
         ((5,), 50),
         ((5, 5), 100),
         ((5, 5, 5), 500),
         ((5, 5, 5, 5), 1000),
-        ((5, 5, 5, 5, 5), 2000),
-        ((5, 5, 5, 5, 5, 5), 4000),
+        ((5, 5, 5, 5, 5), 1500),
+        ((5, 5, 5, 5, 5, 5), 2000),
         ((6,), 0),
         ((6, 6), 0),
         ((6, 6, 6), 600),
         ((6, 6, 6, 6), 1200),
-        ((6, 6, 6, 6, 6), 2400),
-        ((6, 6, 6, 6, 6, 6), 4800),
+        ((6, 6, 6, 6, 6), 1800),
+        ((6, 6, 6, 6, 6, 6), 2400),
         ((1, 2, 3, 4, 5, 6), 1500),
         ((2, 2, 3, 3, 4, 6), 0),
-        ((2, 2, 3, 3, 6, 6), 1000),
+        ((2, 2, 3, 3, 6, 6), 1500),
         ((1, 1, 1, 2, 2, 2), 1200),
     ],
 )
