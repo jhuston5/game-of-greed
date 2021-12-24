@@ -38,7 +38,6 @@ class GameLogic:
             current_roll_score += 1500
             return 1500
 
-
     # Iterate through the roll to determine its score
       pairs = 0
       for i in count_roll:
@@ -46,7 +45,7 @@ class GameLogic:
           if count_roll[i] == 2:
             pairs += count_roll[i]
             if pairs == 6:
-              current_roll_score += 1000
+              current_roll_score += 1500
         
         # Check for rolls of 5 less than 3 of a kind
           if i == 5 and count_roll[i] < 3:
@@ -57,6 +56,7 @@ class GameLogic:
           elif i == 1 and count_roll[i] < 3:
             current_roll_score += count_roll[i] * 100
         
+        # Write a function that iterates through here and doubles it
         # Deal with rolls of 1 more than 3 of a kind
           elif i == 1 and count_roll[i] >= 3:
             if count_roll[i] == 3:
@@ -64,22 +64,22 @@ class GameLogic:
             if count_roll[i] == 4:
               current_roll_score += 2000
             if count_roll[i] == 5:
-              current_roll_score += 4000
+              current_roll_score += 3000
             if count_roll[i] == 6:
-              current_roll_score += 8000
+              current_roll_score += 4000
         
         # Deal with any other 3 of a kind roll
           elif count_roll[i] == 3:
-            current_roll_score += i * 100      
+            current_roll_score += (i * 100)      
         # Deal with any other 4 of a kind roll
           elif count_roll[i] == 4:
             current_roll_score += (i * 100) * 2
         # Deal with any other 5 of a kind roll
           elif count_roll[i] == 5:
-            current_roll_score += (((i * 100) * 2 ) * 2)
+            current_roll_score += (i * 100) * 3
         # Deal with any other 6 of a kind roll
           elif count_roll[i] == 6:
-            current_roll_score  += ((((i * 100) * 2 ) * 2) *2)
+            current_roll_score  += (i * 100) * 4
       print(current_roll_score)
       return current_roll_score      
  
@@ -99,6 +99,7 @@ class Banker:
 
   def clear_shelf(self): 
     self.shelved = 0 
+
 
 if __name__ == "__main__":
   # game_instance = GameLogic()
