@@ -67,19 +67,10 @@ class GameLogic:
               current_roll_score += 3000
             if count_roll[i] == 6:
               current_roll_score += 4000
-        
-        # Deal with any other 3 of a kind roll
-          elif count_roll[i] == 3:
-            current_roll_score += (i * 100)      
-        # Deal with any other 4 of a kind roll
-          elif count_roll[i] == 4:
-            current_roll_score += (i * 100) * 2
-        # Deal with any other 5 of a kind roll
-          elif count_roll[i] == 5:
-            current_roll_score += (i * 100) * 3
-        # Deal with any other 6 of a kind roll
-          elif count_roll[i] == 6:
-            current_roll_score  += (i * 100) * 4
+
+          elif count_roll[i] >= 3:
+            current_roll_score += ((i * 100) * (count_roll[i] - 2))        
+
       print(current_roll_score)
       return current_roll_score      
  
