@@ -8,3 +8,5 @@ This app creates a console version of the dice game "Game of Greed" aka "Farkle"
 Links and Resources
 
 ### Reflections and Comments
+
+Code has gone through several refactors on the function Calulate score to make more DRY and readable.

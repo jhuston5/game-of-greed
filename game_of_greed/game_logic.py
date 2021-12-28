@@ -59,15 +59,7 @@ class GameLogic:
         # Write a function that iterates through here and doubles it
         # Deal with rolls of 1 more than 3 of a kind
           elif i == 1 and count_roll[i] >= 3:
-            if count_roll[i] == 3:
-              current_roll_score += 1000
-            if count_roll[i] == 4:
-              current_roll_score += 2000
-            if count_roll[i] == 5:
-              current_roll_score += 3000
-            if count_roll[i] == 6:
-              current_roll_score += 4000
-
+            current_roll_score += ((count_roll[i] - 2) * 1000)
           elif count_roll[i] >= 3:
             current_roll_score += ((i * 100) * (count_roll[i] - 2))        
 
