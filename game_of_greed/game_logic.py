@@ -1,7 +1,55 @@
+import pytest
 import random
-from collections import Counter
+from collections import Counter 
+import sys
 
+def default_roller():
+  return ( randint(1,6), randint(1,6) )
 
+class Game: 
+  current_round = 1
+  current_dice_count = 6
+  roller_ex = (4,4,5,2,3,1)
+  roller_str = ''
+
+  def play(self, roller=default_roller):  
+    print("Welcome to Game of Greed")
+    print("(y)es to play or (n)o to decline")
+    response = input("> ") 
+    
+    if response == "y": 
+      self.start_game()
+
+    elif response == "n": 
+      self.quit_game()
+   
+  def start_game(self): 
+    print(f"Starting round {self.current_round}")
+    print(f"Rolling {self.current_dice_count} dice...")
+    roll = self.roller_ex
+      
+    for num in roll:
+      self.roller_str += str(num) + " "
+    print(f"*** {self.roller_str}***")
+
+    print("Enter dice to keep, or (q)uit:") 
+    dice_response = input("> ")
+    if dice_response == "y": 
+      self.start_game()
+
+    elif dice_response == "q": 
+      self.end_game()
+
+  def quit_game(self): 
+    print("OK. Maybe another time")
+
+  def end_game(self): 
+    print(f'Thanks for playing. You earned 0 points')
+    sys.exit()
+  
+    
+  
+ 
 class GameLogic:
     number_of_dice_rolled = 0
 
