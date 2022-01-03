@@ -1,4 +1,4 @@
-import pytest
+# import pytest
 import random
 from collections import Counter 
 import sys
@@ -31,18 +31,23 @@ class Game:
       if dice_response == "q": 
         self.end_game()
 
-      unbanked = GameLogic.calculate_score(dice_response)
-      dice_remaining = self.current_dice_count - len(dice_response)
+      unbanked = GameLogic.calculate_score(dice_response) + self.banker.shelved
+      dice_remaining = current_dice_count - len(dice_response)
       print(f"You have {unbanked} unbanked points and {dice_remaining} dice remaining")
       print("(r)oll again, (b)ank your points or (q)uit:")
       
       round_response = input("> ")
       if round_response == "r":
-        self.start_round(dice_remaining)
+        print(f'Dice remaining: {dice_remaining}')
+        self.banker.shelved += unbanked
+        self.current_dice_count = dice_remaining
+        # self.start_round(current_round, dice_remaining)
       if round_response == "b":
         self.banker.balance += unbanked
         print(f"You banked {unbanked} points in round {current_round}")
         print(f"Total score is {self.banker.balance} points")
+        self.banker.clear_shelf()
+        self.current_dice_count = 6
       if round_response == "q":
         self.end_game()
 
@@ -143,7 +148,10 @@ class Banker:
     self.shelved = 0 
 
 
-# if __name__ == "__main__":
+if __name__ == "__main__":
+  game_instance = Game()
+  game_instance.play()
+
   # game_instance = GameLogic()
   # current_dice_roll = GameLogic.roll_dice(6)
   # GameLogic.calculate_score(current_dice_roll)
