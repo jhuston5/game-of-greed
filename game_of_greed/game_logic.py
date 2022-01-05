@@ -23,8 +23,8 @@ class Game:
       self.quit_game()
   
   def start_round(self, current_round, current_dice_count): 
-      print(f"Starting round {current_round}")
       self.new_roll(current_dice_count)
+
 
       print("Enter dice to keep, or (q)uit:") 
       dice_response = input("> ")
@@ -38,10 +38,17 @@ class Game:
       
       round_response = input("> ")
       if round_response == "r":
-        print(f'Dice remaining: {dice_remaining}')
-        self.banker.shelved += unbanked
-        self.current_dice_count = dice_remaining
-        # self.start_round(current_round, dice_remaining)
+        if dice_remaining == 0:
+          self.banker.shelved += unbanked
+          self.current_dice_count = 6
+          self.start_round(current_round, current_dice_count)
+        # print(f'Dice remaining: {dice_remaining}')
+        else:
+          # print(unbanked)
+          self.banker.shelved += unbanked
+          self.current_dice_count = dice_remaining
+          self.start_round(current_round, dice_remaining)
+      
       if round_response == "b":
         self.banker.balance += unbanked
         print(f"You banked {unbanked} points in round {current_round}")
@@ -55,10 +62,14 @@ class Game:
   def start_game(self, roller): 
     current_round = 1
     while True:
+      print(f"Starting round {current_round}")
       self.start_round(current_round,self.current_dice_count)
       current_round += 1
  
-
+  """ def hot_dice(self, dice_roll):
+      hot_dice = GameLogic.calculate_score(dice_roll)
+      if hot_dice 
+  """
   def new_roll(self, current_dice_count):
     print(f"Rolling {current_dice_count} dice...")
 
@@ -101,17 +112,18 @@ class GameLogic:
             current_roll_score += 1500
             return 1500
 
+      # Test list comprehension [True for value in count_roll.values() if [value] == 2]
+      # ('5', 3, '2', 2, '3', 1)
+      if len(count_roll) == 3 and all(val == 2 for val in count_roll.values()):
+        current_roll_score += 1500
+        return 1500
+
     # Iterate through the roll to determine its score
-      pairs = 0
+      # else:
+          
       for i in count_roll:
         # Set the counter dictionary key as an integer for comparison eg {'5': 1} i = int('5')
         set_i_int = int(i)
-
-      # Check for pairs of numbers
-        if count_roll[i] == 2:
-          pairs += count_roll[i]
-          if pairs == 6:
-            current_roll_score += 1500
       
       # Check for rolls of 5 less than 3 of a kind
         if set_i_int == 5 and count_roll[i] < 3:
@@ -119,13 +131,14 @@ class GameLogic:
           current_roll_score += score
 
       # Check for rolls of 1 less than 3 of a kind
-        elif set_i_int == 1 and count_roll[i] < 3:
-          current_roll_score += count_roll[i] * 100
+        if set_i_int == 1 and count_roll[i] < 3:
+          score = count_roll[i] * 100
+          current_roll_score += score
       
       # Deal with rolls of 1 more than 3 of a kind
-        elif set_i_int == 1 and count_roll[i] >= 3:
+        if set_i_int == 1 and count_roll[i] >= 3:
           current_roll_score += ((count_roll[i] - 2) * 1000)
-        elif count_roll[i] >= 3:
+        if set_i_int != 1 and count_roll[i] >= 3:
           current_roll_score += ((set_i_int * 100) * (count_roll[i] - 2))        
 
       # print(f'this is current roll score: {current_roll_score}')
