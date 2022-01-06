@@ -23,7 +23,7 @@ class Game:
       self.quit_game()
   
 
-  def cheater(self, round_roll, dice_response):
+  """def cheater(self, round_roll, dice_response):
    
     dice_string = str(round_roll)
     disallowed_char = ", ()"
@@ -39,13 +39,14 @@ class Game:
       value_2 = count_dr[key]
       if value_1 < value_2:
         return False
-    
+"""
 
   def start_round(self, current_round, current_dice_count, first_round=True): 
     if first_round:
       print(f"Starting round {current_round}")
     print(f"Rolling {current_dice_count} dice...")
     round_roll = self.new_roll(current_dice_count)
+    self.zilch(round_roll, current_round)
     # print(f'Round Roll : {self.new_roll}')
     status = True
     while status:
@@ -55,7 +56,7 @@ class Game:
       # print(f"Dice Response: {dice_response}")
       if dice_response == "q":
         self.end_game()
-      elif self.cheater(round_roll, dice_response) == False:
+      elif GameLogic.validate_keepers(round_roll, dice_response) == False:
         print("Cheater!!! Or possibly made a typo...")
         print("*** " + " ".join([str(i) for i in round_roll]) + " ***")
         # self.start_round(current_round, current_dice_count)
@@ -117,7 +118,18 @@ class Game:
 
     roll = self._roller(current_dice_count)
     print("*** " + " ".join([str(i) for i in roll]) + " ***")
-    return roll
+    return roll 
+
+
+  def zilch(self,round_roll,current_round): 
+    if GameLogic.calculate_score(round_roll) == 0:
+      print("""****************************************
+**        Zilch!!! Round over         **
+****************************************""")
+      print(f"You banked 0 points in round {current_round}")
+      print(f"Total score is {self.banker.balance} points")
+      self.start_round(current_round+1, 6)
+
 
   def quit_game(self): 
     print("OK. Maybe another time")
@@ -184,7 +196,29 @@ class GameLogic:
 
       # print(f'this is current roll score: {current_roll_score}')
       return current_roll_score      
- 
+    @staticmethod
+    def validate_keepers(round_roll, dice_response):
+      # print(f'Dice Response val: {dice_response}')
+      dice_string = str(round_roll)
+      dice_resp_string = str(dice_response)
+      disallowed_char = ", ()[]"
+      for char in disallowed_char:
+        dice_string = dice_string.replace(char, "")
+        dice_resp_string =  dice_resp_string.replace(char, "") 
+      count_rr = Counter(dice_string)
+      count_dr = Counter(dice_resp_string)
+      # print(f'count_rr = {count_rr}')
+      # print(f'count_dr = {count_dr}')
+      for key in count_rr:
+        value_1 = count_rr[key]
+        value_2 = count_dr[key]
+        # print(f'val_1  {value_1} & val_2 {value_2}') 
+        if value_1 < value_2:
+          return False
+        elif value_1 > value_2:
+          return True
+
+
 class Banker:
   def __init__(self): 
      self.balance = 0
