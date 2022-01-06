@@ -3,7 +3,7 @@ from game_of_greed.game_logic import GameLogic
 
 pytestmark = [pytest.mark.version_3]
 
-@pytest.mark.skip('Pending')
+# @pytest.mark.skip('Pending')
 @pytest.mark.parametrize(
     "test_input,expected",
     [

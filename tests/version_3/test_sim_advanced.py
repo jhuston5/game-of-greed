@@ -32,7 +32,7 @@ def test_cheat_and_fix():
     diffs = diff(Game().play, path="version_3/cheat_and_fix.sim.txt")
     assert not diffs, diffs
 
-@pytest.mark.skip('Pending')
+# @pytest.mark.skip('Pending')
 def test_zilcher():
     """
     No scoring dice results in a 'zilch'
@@ -40,5 +40,5 @@ def test_zilcher():
     and ends turn
     """
 
-    diffs = diff(Game().play, path="tests/version_3/zilcher.sim.txt")
+    diffs = diff(Game().play, path="version_3/zilcher.sim.txt")
     assert not diffs, diffs
