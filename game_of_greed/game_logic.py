@@ -23,43 +23,30 @@ class Game:
       self.quit_game()
   
 
-  """def cheater(self, round_roll, dice_response):
-   
-    dice_string = str(round_roll)
-    disallowed_char = ", ()"
-    for char in disallowed_char:
-      dice_string = dice_string.replace(char, "")
 
-
-    count_rr = Counter(dice_string)
-    count_dr = Counter(dice_response)
-    
-    for key in count_rr:
-      value_1 = count_rr[key]
-      value_2 = count_dr[key]
-      if value_1 < value_2:
-        return False
-"""
 
   def start_round(self, current_round, current_dice_count, first_round=True): 
     if first_round:
       print(f"Starting round {current_round}")
     print(f"Rolling {current_dice_count} dice...")
     round_roll = self.new_roll(current_dice_count)
-    self.zilch(round_roll, current_round)
-    # print(f'Round Roll : {self.new_roll}')
+    self.zilch(round_roll, current_round) 
+
+    
+
     status = True
     while status:
       print("Enter dice to keep, or (q)uit:") 
       dice_response = input("> ")
       dice_response = dice_response.replace(" ", "")
-      # print(f"Dice Response: {dice_response}")
+      
+      
+
       if dice_response == "q":
         self.end_game()
       elif GameLogic.validate_keepers(round_roll, dice_response) == False:
         print("Cheater!!! Or possibly made a typo...")
-        print("*** " + " ".join([str(i) for i in round_roll]) + " ***")
-        # self.start_round(current_round, current_dice_count)
+        print("*** " + " ".join([str(i) for i in round_roll]) + " ***")    
         continue
       
       unbanked = GameLogic.calculate_score(dice_response) + self.banker.shelved
@@ -74,17 +61,13 @@ class Game:
           self.current_dice_count = 6
           self.start_round(current_round, current_dice_count, False)
         
-        # elif current_round > 0:
-        #   self.start_round(current_round, dice_remaining)
         else:
           self.banker.shelved += unbanked
           self.current_dice_count = dice_remaining
           self.start_round(current_round, dice_remaining, False)
 
-
       elif round_response == "q":
-        self.end_game()
-        
+        self.end_game()     
 
       elif round_response == "b":
         self.banker.balance += unbanked
@@ -92,34 +75,22 @@ class Game:
         print(f"Total score is {self.banker.balance} points")
         self.banker.clear_shelf()
         self.current_dice_count = 6
-        # print(f'Current Round at Bank: {current_round}')
+
         current_round += 1
         print(f"Starting round {current_round}")
         self.start_round(current_round, 6, False)
         status = False
-        # print(f'status: {status}')
-    
-    # print('outside the loop')
-    return
-            
-
 
   def start_game(self, roller): 
     current_round = 1
     while current_round <= 20:
       self.start_round(current_round,self.current_dice_count)
       print(f'Current Round at Bank: {current_round}')
-  """ def hot_dice(self, dice_roll):
-      hot_dice = GameLogic.calculate_score(dice_roll)
-      if hot_dice 
-  """
-
+  
   def new_roll(self, current_dice_count):
-
     roll = self._roller(current_dice_count)
     print("*** " + " ".join([str(i) for i in roll]) + " ***")
     return roll 
-
 
   def zilch(self,round_roll,current_round): 
     if GameLogic.calculate_score(round_roll) == 0:
@@ -151,7 +122,6 @@ class GameLogic:
         GameLogic.number_of_dice_rolled = rolled_dice
         for _ in range(rolled_dice):
             dice_list.append(random.randint(1,6))
-        # print(tuple(dice_list))
         return tuple(dice_list)
 
     @staticmethod
@@ -196,28 +166,58 @@ class GameLogic:
 
       # print(f'this is current roll score: {current_roll_score}')
       return current_roll_score      
+
     @staticmethod
     def validate_keepers(round_roll, dice_response):
-      # print(f'Dice Response val: {dice_response}')
+      # change round_roll/dice_response to a string; it was an int
       dice_string = str(round_roll)
       dice_resp_string = str(dice_response)
+       
+      #removes all the weird characters in the strings 
       disallowed_char = ", ()[]"
       for char in disallowed_char:
         dice_string = dice_string.replace(char, "")
         dice_resp_string =  dice_resp_string.replace(char, "") 
+        
+      #get the counter dictionary from the strings made from round_roll and dice_response
       count_rr = Counter(dice_string)
       count_dr = Counter(dice_resp_string)
-      # print(f'count_rr = {count_rr}')
-      # print(f'count_dr = {count_dr}')
+
+      #for loop to compare the key value pairs and set the status to pull into the while loop in Game.start_round
       for key in count_rr:
         value_1 = count_rr[key]
         value_2 = count_dr[key]
-        # print(f'val_1  {value_1} & val_2 {value_2}') 
+
+        #this manages the number of kept numbers compared to the number of dice in the current dice roll. 
         if value_1 < value_2:
           return False
         elif value_1 > value_2:
           return True
 
+    @staticmethod 
+    def get_scorers(dice_list): 
+      #passing in dice_list through calculate_score function
+      all_dice = GameLogic.calculate_score(dice_list)  
+
+      #if the dice have no scoring dice.     
+      if all_dice == 0:
+        return tuple() 
+
+      #holds the sets of tuples in an list 
+      scorers = [] 
+      for i in range(len(dice_list)): 
+          #takes the numbers in dicelist and chooses the first index ([:i] then concatenates the following values in that list on an increment of 1)
+          sub_roll = dice_list[:i] + dice_list[i + 1:] 
+          #of those in sub_roll runs them through gamelogic.calculate score
+          sub_score = GameLogic.calculate_score(sub_roll)
+          # print(f'subroll: {sub_roll}') 
+
+          #if the sub score is not all dice (it shouldnt be):
+          if sub_score != all_dice:
+              #add them into the scorers list 
+              scorers.append(dice_list[i]) 
+      #convert this list into tuples
+      return tuple(scorers) 
 
 class Banker:
   def __init__(self): 
