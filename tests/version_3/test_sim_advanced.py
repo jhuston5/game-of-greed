@@ -22,14 +22,14 @@ def test_hot_dice():
     diffs = diff(Game().play, path="version_3/hot_dice.sim.txt")
     assert not diffs, diffs
 
-@pytest.mark.skip('Pending')
+# @pytest.mark.skip('Pending')
 def test_cheat_and_fix():
     """Cheating (or typos) should not be allowed.
     Therefore the user's input must be validated
     If invalid prompt user for re-entry
     """
 
-    diffs = diff(Game().play, path="tests/version_3/cheat_and_fix.sim.txt")
+    diffs = diff(Game().play, path="version_3/cheat_and_fix.sim.txt")
     assert not diffs, diffs
 
 @pytest.mark.skip('Pending')

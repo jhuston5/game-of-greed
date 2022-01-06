@@ -22,15 +22,45 @@ class Game:
     elif response == "n": 
       self.quit_game()
   
-  def start_round(self, current_round, current_dice_count): 
-      self.new_roll(current_dice_count)
+
+  def cheater(self, round_roll, dice_response):
+   
+    dice_string = str(round_roll)
+    disallowed_char = ", ()"
+    for char in disallowed_char:
+      dice_string = dice_string.replace(char, "")
 
 
+    count_rr = Counter(dice_string)
+    count_dr = Counter(dice_response)
+    
+    for key in count_rr:
+      value_1 = count_rr[key]
+      value_2 = count_dr[key]
+      if value_1 < value_2:
+        return False
+    
+
+  def start_round(self, current_round, current_dice_count, first_round=True): 
+    if first_round:
+      print(f"Starting round {current_round}")
+    print(f"Rolling {current_dice_count} dice...")
+    round_roll = self.new_roll(current_dice_count)
+    # print(f'Round Roll : {self.new_roll}')
+    status = True
+    while status:
       print("Enter dice to keep, or (q)uit:") 
       dice_response = input("> ")
-      if dice_response == "q": 
+      dice_response = dice_response.replace(" ", "")
+      # print(f"Dice Response: {dice_response}")
+      if dice_response == "q":
         self.end_game()
-
+      elif self.cheater(round_roll, dice_response) == False:
+        print("Cheater!!! Or possibly made a typo...")
+        print("*** " + " ".join([str(i) for i in round_roll]) + " ***")
+        # self.start_round(current_round, current_dice_count)
+        continue
+      
       unbanked = GameLogic.calculate_score(dice_response) + self.banker.shelved
       dice_remaining = current_dice_count - len(dice_response)
       print(f"You have {unbanked} unbanked points and {dice_remaining} dice remaining")
@@ -41,41 +71,53 @@ class Game:
         if dice_remaining == 0:
           self.banker.shelved += unbanked
           self.current_dice_count = 6
-          self.start_round(current_round, current_dice_count)
-        # print(f'Dice remaining: {dice_remaining}')
+          self.start_round(current_round, current_dice_count, False)
+        
+        # elif current_round > 0:
+        #   self.start_round(current_round, dice_remaining)
         else:
-          # print(unbanked)
           self.banker.shelved += unbanked
           self.current_dice_count = dice_remaining
-          self.start_round(current_round, dice_remaining)
-      
-      if round_response == "b":
+          self.start_round(current_round, dice_remaining, False)
+
+
+      elif round_response == "q":
+        self.end_game()
+        
+
+      elif round_response == "b":
         self.banker.balance += unbanked
         print(f"You banked {unbanked} points in round {current_round}")
         print(f"Total score is {self.banker.balance} points")
         self.banker.clear_shelf()
         self.current_dice_count = 6
-      if round_response == "q":
-        self.end_game()
+        # print(f'Current Round at Bank: {current_round}')
+        current_round += 1
+        print(f"Starting round {current_round}")
+        self.start_round(current_round, 6, False)
+        status = False
+        # print(f'status: {status}')
+    
+    # print('outside the loop')
+    return
+            
 
 
   def start_game(self, roller): 
     current_round = 1
-    while True:
-      print(f"Starting round {current_round}")
+    while current_round <= 20:
       self.start_round(current_round,self.current_dice_count)
-      current_round += 1
- 
+      print(f'Current Round at Bank: {current_round}')
   """ def hot_dice(self, dice_roll):
       hot_dice = GameLogic.calculate_score(dice_roll)
       if hot_dice 
   """
+
   def new_roll(self, current_dice_count):
-    print(f"Rolling {current_dice_count} dice...")
 
     roll = self._roller(current_dice_count)
     print("*** " + " ".join([str(i) for i in roll]) + " ***")
-  
+    return roll
 
   def quit_game(self): 
     print("OK. Maybe another time")
@@ -97,7 +139,7 @@ class GameLogic:
         GameLogic.number_of_dice_rolled = rolled_dice
         for _ in range(rolled_dice):
             dice_list.append(random.randint(1,6))
-        print(tuple(dice_list))
+        # print(tuple(dice_list))
         return tuple(dice_list)
 
     @staticmethod
@@ -108,7 +150,6 @@ class GameLogic:
       
     # Check if there is a straight roll
       if len(count_roll) == 6:
-            print("This is a straight: 1500")
             current_roll_score += 1500
             return 1500
 
