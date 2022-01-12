@@ -1,5 +1,13 @@
 import pytest
-from game_of_greed.game_logic import GameLogic
+try:
+  from game_of_greed.game import Game
+  from game_of_greed.game_logic import GameLogic
+  from game_of_greed.banker import Banker
+
+except:
+  from game import Game
+  from game_logic import GameLogic
+  from banker import Banker
 
 
 # @pytest.mark.skip('Pending')
